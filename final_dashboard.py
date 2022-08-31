@@ -112,7 +112,8 @@ hover = HoverTool(tooltips=[("Country", "@Country"),
                             ("Infant Mortality","@mort"),
                            ])
 
-co2_vs_gdp_scatterplot = data.assign(pop = lambda which: which.population/600000, axis = 1).hvplot(x='GDPc',
+def get_scatterplot():
+  return data.assign(pop = lambda which: which.population/600000, axis = 1).hvplot(x='GDPc',
                                                                 xlabel = 'GDP per capita',
                                                                 xformatter='%.0f',
                                                                 y='mort',
@@ -123,18 +124,16 @@ co2_vs_gdp_scatterplot = data.assign(pop = lambda which: which.population/600000
                                                                 size='pop',
                                                                 legend='top_right',
                                                                 alpha=0.7,
-                                                                height=500,
-                                                                width=500,
+                                                                aspect = 1,
                                                                 tools=[hover],
                                                                 title="Developmental Index measured by the arclength of the blue line"
                                                                 ) * hv.Curve(mean_pop_line ).redim(y=hv.Dimension('y', range=(0, data['mort'].max()+1)))\
-                                                                                            #.redim(x=hv.Dimension('x', range=(0, data['GDPc'].max())))
 
 
 col1, padding, col2 = st.columns((20,2,20))
 with col1:
     st.markdown("### Combining economic and health data to define clusters and an index.")
-    st.write(hv.render(co2_vs_gdp_scatterplot, backend='bokeh'))
+    st.bokeh_chart(hv.render(get_scatterplot(), backend='bokeh'), use_container_width=True)
     st.markdown("###### Source: data.worldbank.org")
 
 ### Bar plot
@@ -238,7 +237,6 @@ with col2:
     st.markdown("##### Sex-ratio is non-monotonic and noisy (e.g., United Arab Emirates has a sex-ratio of 2.56 to 1 and Qatar has 3.39 to 1).")
     st.markdown("###### Source: data.worldbank.org")
     st.markdown("###### Source for Meat consumption, Urbanization rate and Sex-ratio: kaggle.com/datasets/daniboy370/world-data-by-country-2020")
-
 
 ### Map
 
