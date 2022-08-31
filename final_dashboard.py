@@ -337,4 +337,4 @@ AgGrid(
 
 ## Appendix
 
-st.markdown('You can view the code on my [GitHub](https://duckduckgo.com)')
+st.markdown('You can view the code on my [GitHub](https://github.com/alexlewisroberts/dev_index).')
