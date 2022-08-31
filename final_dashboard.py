@@ -12,6 +12,14 @@ import plotly.graph_objects as go
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.impute import KNNImputer
 from sklearn.pipeline import make_pipeline
+from scipy.special import hyp2f1
+from bokeh.models import HoverTool
+from wpca import WPCA
+from sklearn.preprocessing import QuantileTransformer, MinMaxScaler
+from sklearn.impute import KNNImputer
+from sklearn.pipeline import make_pipeline
+from st_aggrid import GridOptionsBuilder, AgGrid
+
 
 st.set_page_config(layout="wide")
 
@@ -26,7 +34,6 @@ data = load_data()
 #reorder columns
 data = data[['dev_index','clusters','ISO-code','Country','GDPc','Population growth','mort','Fertility','Life expectancy','Suicide rate', 'Meat consumption','Urbanization rate','Sex-ratio','population']]
 
-from scipy.special import hyp2f1
 
 ### Scatter Plot
 
@@ -98,8 +105,6 @@ xx1 = np.linspace(data['GDPc'].min(),data['GDPc'].max(),100)
 xx2 = mean_pop_one_over_x.a_1 / xx1
 mean_pop_line = [(a,b) for a,b in zip(xx1,xx2)]
 
-from bokeh.models import HoverTool
-
 hover = HoverTool(tooltips=[("Country", "@Country"),
                             ("Population", "@population{,}"),
                             ("Cluster", "@clusters"),
@@ -133,11 +138,6 @@ with col1:
     st.markdown("###### Source: data.worldbank.org")
 
 ### Bar plot
-
-from wpca import WPCA
-from sklearn.preprocessing import QuantileTransformer, MinMaxScaler
-from sklearn.impute import KNNImputer
-from sklearn.pipeline import make_pipeline
 
 pipe2 = make_pipeline(
     MinMaxScaler(),
@@ -320,8 +320,6 @@ map_table = data.assign(**{
                  .rename(columns={'GDPc':'GDP per capita (PPP)','population':'Population','mort':'Infant Mortality','clusters':'Clusters','dev_index':'Dev_Index'})\
                  .sort_values(by='Dev_Index',ascending=False)\
                  [['Country', 'Dev_Index', 'GDP per capita (PPP)','Population growth','Infant Mortality','Fertility','Life expectancy','Suicide rate', 'Meat consumption','Urbanization rate','Sex-ratio','Population']]
-
-from st_aggrid import GridOptionsBuilder, AgGrid
 
 gb = GridOptionsBuilder.from_dataframe(map_table)
 gb.configure_default_column(width=100)
